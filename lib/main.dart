@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:homz/features/onboarding/onboarding_screen.dart';
+import 'package:homz/core/routs/app_routers.dart';
+import 'package:homz/core/routs/app_routs.dart';
 
 import 'core/theme/app_theme.dart';
 
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: EasyLocalization.of(context)!.supportedLocales,
       locale: EasyLocalization.of(context)!.locale,
       theme: AppTheme.lightTheme,
-      home: const OnboardingScreen(),
+      initialRoute: AppRoutes.onboarding,
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }

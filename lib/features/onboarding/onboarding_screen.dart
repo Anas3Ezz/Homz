@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:homz/features/onboarding/presentation/widgets/language_toggle_button.dart';
-import 'package:homz/features/onboarding/presentation/widgets/onboarding_page.dart';
-import 'package:homz/features/onboarding/presentation/widgets/onboarding_page_data.dart';
-import 'package:homz/features/onboarding/presentation/widgets/onboarding_page_indicator.dart';
+import 'package:homz/core/helper/extensions.dart';
+import 'package:homz/core/routs/app_routs.dart';
+import 'package:homz/core/widgets/language_toggle_button.dart';
+import 'package:homz/features/onboarding/widgets/onboarding_page.dart';
+import 'package:homz/features/onboarding/widgets/onboarding_page_data.dart';
+import 'package:homz/features/onboarding/widgets/onboarding_page_indicator.dart';
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
@@ -51,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onGetStarted() {
-    // TODO: Navigate to the main screen
+    context.pushNamed(AppRoutes.login);
   }
 
   @override
@@ -97,4 +99,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       },
     );
   }
+
+  //TODO:CHECK THE ANIMATION OF THE PAGEVIEW AND MAKE IT SMOOTHER
 }

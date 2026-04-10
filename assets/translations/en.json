@@ -8,5 +8,21 @@
   "onboarding_subtitle_3": "Find what you want",
   "get_started": "Get Started",
   "lang_toggle_ar": "عربي",
-  "lang_toggle_en": "EN"
+  "lang_toggle_en": "EN",
+  "welcome_to_homz": "Welcome to\nHomz",
+  "mobile_number": "Mobile Number",
+  "password": "Password",
+  "forget_password": "Forget Password?",
+  "sign_in": "Sign In",
+  "dont_have_account": "Don't have an account? ",
+  "sign_up": "Sign Up",
+  "or_continue_with": "or continue with",
+  "skip_and_start_browsing": "Skip and Start Browsing",
+  "search": "Search",
+  "error_phone_required": "Phone number is required",
+  "error_phone_invalid": "Enter a valid phone number (7-15 digits)",
+  "error_password_required": "Password is required",
+  "error_password_min_length": "Password must be at least 8 characters",
+  "error_password_uppercase": "Password must contain at least one uppercase letter",
+  "error_password_number": "Password must contain at least one number"
 }

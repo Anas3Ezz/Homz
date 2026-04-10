@@ -1,0 +1,10 @@
+class AppRoutes {
+  static const String onboarding = '/';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String forgotPasswordScreen = '/forgotPasswordScreen';
+  static const String otpVerfication = '/otpVerfication';
+  static const String createNewPasswordScreen = '/createNewPasswordScreen';
+  static const String passwordChangedSuccess = '/passwordChangedSuccess';
+  static const String home = '/home';
+}
