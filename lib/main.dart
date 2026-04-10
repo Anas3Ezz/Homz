@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homz/features/onboarding/onboarding_screen.dart';
 
 import 'core/theme/app_theme.dart';
@@ -7,6 +8,15 @@ import 'core/theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  // ✅ Must be called after ensureInitialized
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light, // white icons (Android)
+      statusBarBrightness: Brightness.dark, // white icons (iOS)
+    ),
+  );
 
   runApp(
     EasyLocalization(
@@ -34,9 +44,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//ElevatedButton(
-            //   onPressed: () =>
-            //       LocaleUtils.switchLanguage(context, LocaleUtils.arabic),
-            //   child: const Text('Switch to Arabic'),
-            // ),

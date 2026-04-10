@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homz/features/onboarding/presentation/widgets/language_toggle_button.dart';
 import 'package:homz/features/onboarding/presentation/widgets/onboarding_page.dart';
 import 'package:homz/features/onboarding/presentation/widgets/onboarding_page_data.dart';
@@ -55,16 +56,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildPageView(),
-          const Positioned(top: 50, right: 16, child: LanguageToggleButton()),
-          OnboardingPageIndicator(
-            pageCount: _pages.length,
-            currentIndex: _currentIndex,
-          ),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light, // white icons (Android)
+        statusBarBrightness: Brightness.dark, // white icons (iOS)
+      ),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _buildPageView(),
+            const Positioned(top: 50, right: 16, child: LanguageToggleButton()),
+            OnboardingPageIndicator(
+              pageCount: _pages.length,
+              currentIndex: _currentIndex,
+            ),
+          ],
+        ),
       ),
     );
   }
