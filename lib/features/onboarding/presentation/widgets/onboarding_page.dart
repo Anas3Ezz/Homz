@@ -44,7 +44,10 @@ class OnboardingPage extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.transparent, AppColors.black.withOpacity(0.8)],
+                colors: [
+                  Colors.transparent,
+                  AppColors.black.withValues(alpha: 0.8),
+                ],
                 stops: const [0.5, 1.0],
               ),
             ),
@@ -71,7 +74,7 @@ class OnboardingPage extends StatelessWidget {
                   Text(
                     subtitleKey.tr(),
                     style: TextStyle(
-                      color: AppColors.white.withOpacity(0.78),
+                      color: AppColors.white.withValues(alpha: 0.78),
                       fontSize: 14,
                       height: 1.6,
                     ),
@@ -111,10 +114,10 @@ class OnboardingPage extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.white.withOpacity(0.8),
+                              color: AppColors.white.withValues(alpha: 0.8),
                               width: 1.5,
                             ),
-                            color: AppColors.black.withOpacity(0.25),
+                            color: AppColors.black.withValues(alpha: 0.25),
                           ),
                           child: const Icon(
                             Icons.arrow_forward,
