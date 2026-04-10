@@ -1,3 +1,12 @@
 {
-  "app_name": "هومز"
+  "app_name": "هومز",
+  "onboarding_title_1": "اكتشف عقارات رائعة",
+  "onboarding_subtitle_1": "ابحث عن ما تريد",
+  "onboarding_title_2": "قارن واختر",
+  "onboarding_subtitle_2": "ابحث عن ما تريد",
+  "onboarding_title_3": "اختر الراحة أكثر",
+  "onboarding_subtitle_3": "ابحث عن ما تريد",
+  "get_started": "ابدأ الآن",
+  "lang_toggle_ar": "عربي",
+  "lang_toggle_en": "EN"
 }
