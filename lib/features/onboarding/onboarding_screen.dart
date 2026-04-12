@@ -39,6 +39,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   static const _animationDuration = Duration(milliseconds: 400);
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _precacheImages();
+  }
+
+  // Future<void> _precacheImages() async {
+  //   for (final page in _pages) {
+  //     await precacheImage(AssetImage(page.imageAsset), context);
+  //   }
+  // }
+  Future<void> _precacheImages() async {
+    await Future.wait([
+      for (final page in _pages)
+        precacheImage(AssetImage(page.imageAsset), context),
+    ]);
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -61,8 +79,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light, // white icons (Android)
-        statusBarBrightness: Brightness.dark, // white icons (iOS)
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
         body: Stack(
@@ -99,6 +117,4 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       },
     );
   }
-
-  //TODO:CHECK THE ANIMATION OF THE PAGEVIEW AND MAKE IT SMOOTHER
 }

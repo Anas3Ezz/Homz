@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:homz/core/helper/validators.dart';
 import 'package:homz/core/theme/app_colors.dart';
 import 'package:homz/features/auth/widgets/login_header.dart';
 
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   String _selectedDialCode = '+962';
+  Locale? _lastLocale;
 
   @override
   void dispose() {
@@ -34,32 +36,18 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // ─── Validators ───────────────────────────────────────────────────────────
-
-  String? _phoneValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'error_phone_required'.tr();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final currentLocale = context.locale;
+    // Always update _lastLocale and trigger rebuild when locale changes
+    if (_lastLocale != currentLocale) {
+      _lastLocale = currentLocale;
+      // Only call setState after the first frame to avoid build-phase errors
+      if (WidgetsBinding.instance.lifecycleState != null) {
+        setState(() {});
+      }
     }
-    if (!RegExp(r'^\d{7,15}$').hasMatch(value.trim())) {
-      return 'error_phone_invalid'.tr();
-    }
-    return null;
-  }
-
-  String? _passwordValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'error_password_required'.tr();
-    }
-    if (value.trim().length < 8) {
-      return 'error_password_min_length'.tr();
-    }
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'error_password_uppercase'.tr();
-    }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'error_password_number'.tr();
-    }
-    return null;
   }
 
   // ─── Actions ──────────────────────────────────────────────────────────────
@@ -82,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -91,7 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: Scaffold(
         backgroundColor: AppColors.black,
-        // ✅ Use SizedBox with screen height to spread content like the design
         body: SafeArea(
           child: SizedBox(
             height: screenHeight,
@@ -103,18 +89,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(40),
-                    const LoginHeader(),
+                    // ✅ Remove const — const prevents Flutter from
+                    // rebuilding this widget when locale changes
+                    LoginHeader(),
                     const Gap(56),
                     PhoneField(
                       controller: _phoneController,
                       onCountryChanged: (dialCode) =>
                           setState(() => _selectedDialCode = dialCode),
-                      validator: _phoneValidator,
+                      validator: AppValidators.phone,
                     ),
                     const Gap(16),
                     PasswordField(
                       controller: _passwordController,
-                      validator: _passwordValidator,
+                      validator: AppValidators.password,
                     ),
                     const Gap(12),
                     ForgotPasswordButton(onTap: _onForgotPassword),

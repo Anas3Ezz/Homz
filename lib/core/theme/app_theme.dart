@@ -14,6 +14,5 @@ class AppTheme {
       backgroundColor: AppColors.white,
       foregroundColor: AppColors.primaryDarkest,
     ),
-    // TODO: Expand theme later
   );
 }

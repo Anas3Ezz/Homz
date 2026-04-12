@@ -13,7 +13,9 @@ class LanguageToggleButton extends StatelessWidget {
     final nextLocale = isArabic ? const Locale('en') : const Locale('ar');
 
     return GestureDetector(
-      onTap: () => context.setLocale(nextLocale),
+      onTap: () async {
+        await context.setLocale(nextLocale);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
