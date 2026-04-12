@@ -4,7 +4,6 @@ import 'package:homz/core/theme/app_colors.dart';
 
 class SignUpHeader extends StatelessWidget {
   final VoidCallback onBack;
-  // ✅ titleKey param so this header is reusable across any screen
   final String titleKey;
 
   const SignUpHeader({super.key, required this.onBack, required this.titleKey});
@@ -41,7 +40,7 @@ class SignUpHeader extends StatelessWidget {
             ),
           ),
         ),
-        // ✅ Invisible spacer to keep title perfectly centered
+        // Invisible spacer to keep title perfectly centered
         const SizedBox(width: 36),
       ],
     );

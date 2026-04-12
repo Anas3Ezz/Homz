@@ -24,5 +24,20 @@
   "error_password_required": "Password is required",
   "error_password_min_length": "Password must be at least 8 characters",
   "error_password_uppercase": "Password must contain at least one uppercase letter",
-  "error_password_number": "Password must contain at least one number"
+  "error_password_number": "Password must contain at least one number",
+  "forget_password_hint": "Enter your Mobile number to reset your password.",
+  "send_code": "Send Code",
+  "otp_resent_title": "Code Resent!",
+  "otp_resent_subtitle": "A new verification code has been sent.",
+  "reset_success_title": "Congratulations!",
+"reset_success_subtitle": "Your password has been successfully updated.",
+"verification_code": "Verification Code",
+"otp_title": "Enter the Verification Code.",
+"otp_subtitle": "We have sent a verification code to your email.",
+"otp_resend_hint": "If you didn't receive the code? ",
+"otp_resend": "Resend",
+"continue": "Continue",
+"reset_password": "Reset Password",
+"reset_password_title": "Enter New Password.",
+"reset_password_subtitle": "Your new password must be strong."
 }

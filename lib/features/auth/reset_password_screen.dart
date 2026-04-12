@@ -6,27 +6,29 @@ import 'package:homz/core/helper/extensions.dart';
 import 'package:homz/core/helper/validators.dart';
 import 'package:homz/core/routs/app_routs.dart';
 import 'package:homz/core/theme/app_colors.dart';
-import 'package:homz/features/auth/widgets/login_widgets/forget_password_hint_text.dart';
-import 'package:homz/features/auth/widgets/plain_phone_field.dart';
+import 'package:homz/core/widgets/app_button.dart';
+import 'package:homz/features/auth/widgets/password_field.dart';
+import 'package:homz/features/auth/widgets/reset_password_hent_text.dart';
 import 'package:homz/features/auth/widgets/signup_widgets/sign_up_header.dart';
+import 'package:homz/features/auth/widgets/sucess_dialog.dart';
 
-import '../../core/widgets/app_button.dart';
-
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   Locale? _lastLocale;
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -44,11 +46,24 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   // ─── Actions ──────────────────────────────────────────────────────────────
 
-  void _onSendCode() {
+  void _onResetPassword() {
     if (_formKey.currentState!.validate()) {
-      context.pushNamed(AppRoutes.otpVerfication);
-      debugPrint('Send code to: ${_phoneController.text.trim()}');
+      // TODO: pass new password to auth cubit/bloc
+      debugPrint('New password: ${_passwordController.text.trim()}');
+      _showSuccessDialog();
     }
+  }
+
+  void _showSuccessDialog() {
+    showSuccessDialog(
+      context: context,
+      titleKey: 'reset_success_title',
+      subtitleKey: 'reset_success_subtitle',
+      onContinue: () {
+        Navigator.pop(context); // Close dialog
+        context.pushNamed(AppRoutes.login);
+      },
+    );
   }
 
   void _onBack() => Navigator.pop(context);
@@ -74,16 +89,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(20),
-                  SignUpHeader(onBack: _onBack, titleKey: 'forget_password'),
+                  SignUpHeader(onBack: _onBack, titleKey: 'Reset Password'),
                   const Gap(32),
-                  ForgetPasswordHintText(),
-                  const Gap(24),
-                  PlainPhoneField(
-                    controller: _phoneController,
-                    validator: AppValidators.phone,
-                  ),
+                  ResetPasswordHintText(),
                   const Gap(28),
-                  AppButton(label: 'send_code'.tr(), onTap: _onSendCode),
+                  PasswordField(
+                    controller: _passwordController,
+                    validator: AppValidators.password,
+                  ),
+                  const Gap(16),
+                  PasswordField(
+                    controller: _confirmPasswordController,
+                    hintKey: 'confirm_password',
+                    validator: (val) => AppValidators.confirmPassword(
+                      val,
+                      _passwordController.text,
+                    ),
+                  ),
+                  const Gap(32),
+                  AppButton(
+                    label: 'reset_password'.tr(),
+                    onTap: _onResetPassword,
+                  ),
                 ],
               ),
             ),
