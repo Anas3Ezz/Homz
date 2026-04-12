@@ -5,11 +5,11 @@ import 'package:gap/gap.dart';
 import 'package:homz/core/helper/validators.dart';
 import 'package:homz/core/theme/app_colors.dart';
 import 'package:homz/core/widgets/app_button.dart';
-import 'package:homz/features/auth/widgets/name_field.dart';
 import 'package:homz/features/auth/widgets/or_continue_with_divider.dart';
 import 'package:homz/features/auth/widgets/password_field.dart';
-import 'package:homz/features/auth/widgets/phone_field.dart';
-import 'package:homz/features/auth/widgets/sign_up_header.dart';
+import 'package:homz/features/auth/widgets/plain_phone_field.dart';
+import 'package:homz/features/auth/widgets/signup_widgets/name_field.dart';
+import 'package:homz/features/auth/widgets/signup_widgets/sign_up_header.dart';
 import 'package:homz/features/auth/widgets/social_login_button.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  String _selectedDialCode = '+962';
+  final String _selectedDialCode = '+962';
   Locale? _lastLocale;
 
   @override
@@ -85,17 +85,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(20),
-                  SignUpHeader(onBack: _onBack),
+                  SignUpHeader(onBack: _onBack, titleKey: 'create_account'),
                   const Gap(40),
                   NameField(
                     controller: _nameController,
                     validator: AppValidators.name,
                   ),
                   const Gap(16),
-                  PhoneField(
+                  PlainPhoneField(
                     controller: _phoneController,
-                    onCountryChanged: (dialCode) =>
-                        setState(() => _selectedDialCode = dialCode),
                     validator: AppValidators.phone,
                   ),
                   const Gap(16),
@@ -104,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     validator: AppValidators.password,
                   ),
                   const Gap(16),
-                  // ✅ Confirm password uses confirmPassword validator
+                  //  Confirm password uses confirmPassword validator
                   // passing the live value of _passwordController
                   PasswordField(
                     controller: _confirmPasswordController,

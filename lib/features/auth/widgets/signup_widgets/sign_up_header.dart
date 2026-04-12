@@ -4,8 +4,10 @@ import 'package:homz/core/theme/app_colors.dart';
 
 class SignUpHeader extends StatelessWidget {
   final VoidCallback onBack;
+  // ✅ titleKey param so this header is reusable across any screen
+  final String titleKey;
 
-  const SignUpHeader({super.key, required this.onBack});
+  const SignUpHeader({super.key, required this.onBack, required this.titleKey});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class SignUpHeader extends StatelessWidget {
         Expanded(
           child: Center(
             child: Text(
-              'create_account'.tr(),
+              titleKey.tr(),
               style: const TextStyle(
                 color: AppColors.white,
                 fontSize: 18,
@@ -39,7 +41,7 @@ class SignUpHeader extends StatelessWidget {
             ),
           ),
         ),
-        // ✅ Invisible spacer to keep title centered
+        // ✅ Invisible spacer to keep title perfectly centered
         const SizedBox(width: 36),
       ],
     );

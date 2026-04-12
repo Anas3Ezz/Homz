@@ -2,17 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:homz/core/helper/extensions.dart';
 import 'package:homz/core/helper/validators.dart';
+import 'package:homz/core/routs/app_routs.dart';
 import 'package:homz/core/theme/app_colors.dart';
 import 'package:homz/core/widgets/app_button.dart';
-import 'package:homz/features/auth/widgets/login_header.dart';
+import 'package:homz/features/auth/widgets/login_widgets/login_header.dart';
+import 'package:homz/features/auth/widgets/plain_phone_field.dart';
 
-import 'widgets/dont_have_account_row.dart';
-import 'widgets/forget_password_button.dart';
+import 'widgets/login_widgets/dont_have_account_row.dart';
+import 'widgets/login_widgets/forget_password_button.dart';
+import 'widgets/login_widgets/skip_button.dart';
 import 'widgets/or_continue_with_divider.dart';
 import 'widgets/password_field.dart';
-import 'widgets/phone_field.dart';
-import 'widgets/skip_button.dart';
 import 'widgets/social_login_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  String _selectedDialCode = '+962';
+  final String _selectedDialCode = '+962';
   Locale? _lastLocale;
 
   @override
@@ -59,8 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _onForgotPassword() {}
-  void _onSignUp() {}
+  void _onForgotPassword() {
+    context.pushNamed(AppRoutes.forgotPasswordScreen);
+  }
+
+  void _onSignUp() {
+    context.pushNamed(AppRoutes.signup);
+  }
+
   void _onGoogleLogin() {}
   void _onAppleLogin() {}
   void _onSkip() {}
@@ -93,10 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     // rebuilding this widget when locale changes
                     LoginHeader(),
                     const Gap(56),
-                    PhoneField(
+                    PlainPhoneField(
                       controller: _phoneController,
-                      onCountryChanged: (dialCode) =>
-                          setState(() => _selectedDialCode = dialCode),
+
                       validator: AppValidators.phone,
                     ),
                     const Gap(16),

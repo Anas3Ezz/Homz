@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homz/core/routs/app_routs.dart';
+import 'package:homz/features/auth/forget_password_screen.dart';
 import 'package:homz/features/auth/login_screen.dart';
+import 'package:homz/features/auth/sign_up_screen.dart';
 import 'package:homz/features/onboarding/onboarding_screen.dart';
 
 class AppRouter {
@@ -11,6 +13,10 @@ class AppRouter {
 
       case AppRoutes.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
+      case AppRoutes.signup:
+        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+      case AppRoutes.forgotPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
