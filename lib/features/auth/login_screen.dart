@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:homz/core/helper/validators.dart';
 import 'package:homz/core/theme/app_colors.dart';
+import 'package:homz/core/widgets/app_button.dart';
 import 'package:homz/features/auth/widgets/login_header.dart';
 
 import 'widgets/dont_have_account_row.dart';
@@ -11,7 +12,6 @@ import 'widgets/forget_password_button.dart';
 import 'widgets/or_continue_with_divider.dart';
 import 'widgets/password_field.dart';
 import 'widgets/phone_field.dart';
-import 'widgets/sign_in_button.dart';
 import 'widgets/skip_button.dart';
 import 'widgets/social_login_button.dart';
 
@@ -107,7 +107,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Gap(12),
                     ForgotPasswordButton(onTap: _onForgotPassword),
                     const Gap(32),
-                    SignInButton(onTap: _onSignIn),
+                    AppButton(
+                      label: 'sign_in'.tr(),
+                      onTap: _onSignIn,
+                      backgroundColor: AppColors.darker,
+                    ),
                     const Gap(24),
                     DontHaveAccountRow(onSignUpTap: _onSignUp),
                     const Gap(32),

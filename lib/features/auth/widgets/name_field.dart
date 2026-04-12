@@ -2,47 +2,32 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:homz/core/theme/app_colors.dart';
 
-class PasswordField extends StatefulWidget {
+class NameField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?) validator;
-  // ✅ Optional hintKey — defaults to 'password', pass 'confirm_password' when needed
-  final String hintKey;
 
-  const PasswordField({
+  const NameField({
     super.key,
     required this.controller,
     required this.validator,
-    this.hintKey = 'password',
   });
-
-  @override
-  State<PasswordField> createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  bool _obscure = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: widget.controller,
-      obscureText: _obscure,
+      controller: controller,
+      keyboardType: TextInputType.name,
+      textCapitalization: TextCapitalization.words,
       style: const TextStyle(color: AppColors.white),
-      validator: widget.validator,
+      validator: validator,
       decoration: InputDecoration(
-        hintText: widget.hintKey.tr(),
+        hintText: 'name'.tr(),
         hintStyle: TextStyle(color: AppColors.lightGray),
         filled: true,
         fillColor: AppColors.darkest,
-        prefixIcon: Icon(Icons.lock_outline, color: AppColors.lightGray),
-        suffixIcon: GestureDetector(
-          onTap: () => setState(() => _obscure = !_obscure),
-          child: Icon(
-            _obscure
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            color: AppColors.lightGray,
-          ),
+        prefixIcon: Icon(
+          Icons.person_outline_rounded,
+          color: AppColors.lightGray,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

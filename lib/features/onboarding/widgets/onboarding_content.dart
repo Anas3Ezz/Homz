@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homz/core/theme/app_colors.dart';
+import 'package:homz/core/widgets/app_button.dart';
 
-import 'onboarding_get_started_button.dart';
 import 'onboarding_next_button.dart';
 
 class OnboardingContent extends StatelessWidget {
@@ -54,7 +54,7 @@ class OnboardingContent extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               if (showGetStartedButton) ...[
-                OnboardingGetStartedButton(onGetStarted: onGetStarted),
+                AppButton(label: 'get_started'.tr(), onTap: onGetStarted!),
                 const Gap(16),
               ],
               if (showNextButton) OnboardingNextButton(onNext: onNext),
