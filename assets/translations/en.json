@@ -39,5 +39,16 @@
 "continue": "Continue",
 "reset_password": "Reset Password",
 "reset_password_title": "Enter New Password.",
-"reset_password_subtitle": "Your new password must be strong."
+"reset_password_subtitle": "Your new password must be strong.",
+"rent": "Rent",
+"buy": "Buy",
+"commercial": "Commercial",
+"residential": "Residential",
+"shops": "Shops",
+"take_a_look": "Take a Look",
+"nav_home": "Home",
+"nav_search": "Search",
+"nav_wishlist": "Wishlist",
+"nav_chat": "Chat",
+"nav_profile": "Profile"
 }

@@ -71,7 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onGoogleLogin() {}
   void _onAppleLogin() {}
-  void _onSkip() {}
+  void _onSkip() {
+    context.pushNamed(AppRoutes.home);
+  }
 
   // ─── Build ────────────────────────────────────────────────────────────────
 
@@ -97,13 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(40),
-                    // ✅ Remove const — const prevents Flutter from
-                    // rebuilding this widget when locale changes
                     LoginHeader(),
                     const Gap(56),
                     PlainPhoneField(
                       controller: _phoneController,
-
                       validator: AppValidators.phone,
                     ),
                     const Gap(16),
@@ -114,11 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Gap(12),
                     ForgotPasswordButton(onTap: _onForgotPassword),
                     const Gap(32),
-                    AppButton(
-                      label: 'sign_in'.tr(),
-                      onTap: _onSignIn,
-                      backgroundColor: AppColors.darker,
-                    ),
+                    AppButton(label: 'sign_in'.tr(), onTap: _onSignIn),
                     const Gap(24),
                     DontHaveAccountRow(onSignUpTap: _onSignUp),
                     const Gap(32),
