@@ -23,15 +23,19 @@ class PropertyCarousel extends StatelessWidget {
       height: 420,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        // ✅ Left padding for first card, right padding handled per item
         padding: const EdgeInsets.only(left: 8),
+        // ✅ addAutomaticKeepAlives false — cards not visible are not kept
+        // alive in memory, reducing RAM usage in long lists
+        addAutomaticKeepAlives: false,
+        // ✅ addRepaintBoundaries true (default) — each card gets its own
+        // repaint layer so scrolling one card doesn't repaint others
+        addRepaintBoundaries: true,
         itemCount: properties.length,
         itemBuilder: (context, index) {
           final property = properties[index];
           final isLast = index == properties.length - 1;
           return Padding(
-            // ✅ Last card gets extra right padding so it's not clipped
-            padding: EdgeInsets.only(right: isLast ? 24 : 0),
+            padding: EdgeInsets.only(right: isLast ? 24 : 16),
             child: PropertyCard(
               property: property,
               onWishlistTap: () => onWishlistTap(property),

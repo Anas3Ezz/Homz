@@ -20,24 +20,31 @@ class PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.82,
+    final cardWidth = MediaQuery.of(context).size.width * 0.82;
+
+    return SizedBox(
+      width: cardWidth,
       height: 420,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(
-          image: AssetImage(property.imageAsset),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          // ✅ Dark gradient overlay at bottom
-          Positioned.fill(
-            child: Container(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // ✅ Image.asset with cacheWidth — Flutter decodes the image
+            // at the exact display size instead of full resolution
+            // This reduces RAM usage significantly in a carousel
+            Image.asset(
+              property.imageAsset,
+              fit: BoxFit.cover,
+              // ✅ cacheWidth in logical pixels * device pixel ratio
+              // gives Flutter the right decode size
+              cacheWidth: (cardWidth * MediaQuery.of(context).devicePixelRatio)
+                  .toInt(),
+            ),
+
+            // ✅ Dark gradient overlay at bottom
+            Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -49,86 +56,84 @@ class PropertyCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
 
-          // ✅ Wishlist heart button — top right
-          Positioned(
-            top: 16,
-            right: 16,
-            child: GestureDetector(
-              onTap: onWishlistTap,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.black.withValues(alpha: 0.4),
-                ),
-                child: Icon(
-                  property.isWishlisted
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
-                  color: property.isWishlisted
-                      ? AppColors.error
-                      : AppColors.white,
-                  size: 20,
+            // ✅ Wishlist heart button — top right
+            Positioned(
+              top: 16,
+              right: 16,
+              child: GestureDetector(
+                onTap: onWishlistTap,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.black.withValues(alpha: 0.4),
+                  ),
+                  child: Icon(
+                    property.isWishlisted
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
+                    color: property.isWishlisted
+                        ? AppColors.error
+                        : AppColors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // ✅ Take a Look + Share buttons — bottom
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 16,
-            child: Row(
-              children: [
-                // Take a Look button
-                Expanded(
-                  child: GestureDetector(
-                    onTap: onTakeLookTap,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLighter,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'take_a_look'.tr(),
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+            // ✅ Take a Look + Share buttons — bottom
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: onTakeLookTap,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLighter,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'take_a_look'.tr(),
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                // Share button
-                GestureDetector(
-                  onTap: onShareTap,
-                  child: Container(
-                    width: 46,
-                    height: 46,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryLighter,
-                    ),
-                    child: const Icon(
-                      Icons.reply_rounded,
-                      color: AppColors.white,
-                      size: 22,
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: onShareTap,
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primaryLighter,
+                      ),
+                      child: const Icon(
+                        Icons.reply_rounded,
+                        color: AppColors.white,
+                        size: 22,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

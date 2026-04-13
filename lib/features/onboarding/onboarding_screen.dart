@@ -15,10 +15,16 @@ class OnBoardingScreen extends StatefulWidget {
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen>
+    with TickerProviderStateMixin {
   final PageController _pageController = PageController();
+  // ignore: unused_field
   int _currentIndex = 0;
-  double _currentPageValue = 0.0;
+
+  // ✅ One AnimationController per page for FadeTransition
+  // This replaces Opacity (expensive) + addListener setState (whole tree rebuild)
+  late final List<AnimationController> _fadeControllers;
+  late final List<Animation<double>> _fadeAnimations;
 
   static const List<OnboardingPageData> _pages = [
     OnboardingPageData(
@@ -43,14 +49,46 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() {
-      setState(() => _currentPageValue = _pageController.page ?? 0.0);
-    });
+    // ✅ Create one controller per page
+    _fadeControllers = List.generate(
+      _pages.length,
+      (index) => AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 300),
+        // ✅ First page starts fully visible, rest start faded out
+        value: index == 0 ? 1.0 : 0.4,
+      ),
+    );
+    _fadeAnimations = _fadeControllers
+        .map(
+          (c) => Tween<double>(
+            begin: 0.4,
+            end: 1.0,
+          ).animate(CurvedAnimation(parent: c, curve: Curves.easeInOut)),
+        )
+        .toList();
+
+    // ✅ AnimatedBuilder handles rebuilds surgically —
+    // only the specific page widget rebuilds, not the whole screen
+    _pageController.addListener(_onPageScroll);
+  }
+
+  void _onPageScroll() {
+    final page = _pageController.page ?? 0.0;
+    for (int i = 0; i < _pages.length; i++) {
+      final distance = (page - i).abs().clamp(0.0, 1.0);
+      // ✅ Drive each controller directly from scroll position
+      _fadeControllers[i].value = 1.0 - (distance * 0.6);
+    }
   }
 
   @override
   void dispose() {
+    _pageController.removeListener(_onPageScroll);
     _pageController.dispose();
+    for (final c in _fadeControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 
@@ -94,23 +132,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       itemBuilder: (context, index) {
         final page = _pages[index];
         final isLast = index == _pages.length - 1;
-        final distance = (_currentPageValue - index).abs();
-        final opacity = (1.0 - (distance * 0.6)).clamp(0.4, 1.0);
-        final scale = (1.0 - (distance * 0.08)).clamp(0.92, 1.0);
 
-        return Transform.scale(
-          scale: scale,
-          child: Opacity(
-            opacity: opacity,
-            child: OnboardingPage(
-              imageAsset: page.imageAsset,
-              titleKey: page.titleKey,
-              subtitleKey: page.subtitleKey,
-              showNextButton: !isLast,
-              onNext: !isLast ? () => _goToPage(index + 1) : null,
-              showGetStartedButton: isLast,
-              onGetStarted: isLast ? _onGetStarted : null,
-            ),
+        return AnimatedBuilder(
+          // ✅ AnimatedBuilder only rebuilds THIS page's subtree
+          // not the whole screen — surgical and efficient
+          animation: _fadeControllers[index],
+          builder: (context, child) {
+            final value = _fadeAnimations[index].value;
+            return Transform.scale(
+              // ✅ Scale derived from fade value — no separate scroll listener
+              scale: 0.92 + (value - 0.4) * (0.08 / 0.6),
+              child: FadeTransition(
+                // ✅ FadeTransition is GPU-accelerated — much cheaper than Opacity
+                opacity: _fadeAnimations[index],
+                child: child,
+              ),
+            );
+          },
+          child: OnboardingPage(
+            imageAsset: page.imageAsset,
+            titleKey: page.titleKey,
+            subtitleKey: page.subtitleKey,
+            showNextButton: !isLast,
+            onNext: !isLast ? () => _goToPage(index + 1) : null,
+            showGetStartedButton: isLast,
+            onGetStarted: isLast ? _onGetStarted : null,
           ),
         );
       },
@@ -126,8 +172,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         child: SmoothPageIndicator(
           controller: _pageController,
           count: _pages.length,
-          // ✅ WormEffect matches the expanding dot style we had before
-          // but with much smoother animation
           effect: WormEffect(
             dotWidth: 10,
             dotHeight: 10,
@@ -135,7 +179,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             dotColor: AppColors.gray.withValues(alpha: 0.5),
             spacing: 12,
           ),
-          // ✅ Tapping a dot navigates directly to that page
           onDotClicked: (index) => _goToPage(index),
         ),
       ),
