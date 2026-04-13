@@ -7,6 +7,7 @@ import '../models/property_model.dart';
 import '../widgets/category_tabs.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_bottom_nav.dart';
+import '../widgets/home_empty_state.dart';
 import '../widgets/property_carousel.dart';
 import '../widgets/rent_buy_toggle.dart';
 
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     PropertyModel(
       id: '2',
-      imageAsset: 'assets/images/Frame 14.png',
+      imageAsset: 'assets/images/image 17.png',
       title: 'Luxury Apartment',
       location: 'Dubai, UAE',
       price: '\$3,500/mo',
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     PropertyModel(
       id: '3',
-      imageAsset: 'assets/images/Frame 14.png',
+      imageAsset: 'assets/images/onboarding_1.png',
       title: 'Office Space',
       location: 'Cairo, Egypt',
       price: '\$2,000/mo',
@@ -80,10 +81,18 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: Navigate to notifications screen
   }
 
+  // ✅ Pull to refresh — replace with API call later
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {});
+  }
+
   // ─── Build ────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
+    final filtered = _filteredProperties;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -97,54 +106,63 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (index) => setState(() => _currentNavIndex = index),
         ),
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ─── App Bar ─────────────────────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: HomeAppBar(onNotificationTap: _onNotificationTap),
-              ),
-              const Gap(20),
+          child: RefreshIndicator(
+            // ✅ Pull to refresh
+            onRefresh: _onRefresh,
+            color: AppColors.primaryLighter,
+            backgroundColor: AppColors.darker,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(16),
 
-              // ─── Rent / Buy Toggle ────────────────────────────────────────
-              Center(
-                child: RentBuyToggle(
-                  isRent: _isRent,
-                  onToggle: (val) => setState(() => _isRent = val),
-                ),
-              ),
-              const Gap(24),
+                  // ─── App Bar ───────────────────────────────────────────
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: HomeAppBar(onNotificationTap: _onNotificationTap),
+                  ),
+                  const Gap(20),
 
-              // ─── Property Carousel ────────────────────────────────────────
-              _filteredProperties.isEmpty
-                  ? const Expanded(
-                      child: Center(
-                        child: Text(
-                          'No properties found',
-                          style: TextStyle(color: AppColors.gray),
-                        ),
-                      ),
-                    )
-                  : PropertyCarousel(
-                      properties: _filteredProperties,
-                      onWishlistTap: _onWishlistTap,
-                      onTakeLookTap: _onTakeLookTap,
-                      onShareTap: _onShareTap,
+                  // ─── Rent / Buy Toggle ─────────────────────────────────
+                  Center(
+                    child: RentBuyToggle(
+                      isRent: _isRent,
+                      onToggle: (val) => setState(() => _isRent = val),
                     ),
-              const Gap(24),
+                  ),
+                  const Gap(24),
 
-              // ─── Category Tabs ────────────────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: CategoryTabs(
-                  selectedCategory: _selectedCategory,
-                  onCategoryChanged: (cat) =>
-                      setState(() => _selectedCategory = cat),
-                ),
+                  // ─── Property Carousel or Empty State ──────────────────
+                  // ✅ AnimatedSwitcher gives a smooth fade between
+                  // carousel and empty state when filter changes
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: filtered.isEmpty
+                        ? const HomeEmptyState()
+                        : PropertyCarousel(
+                            key: ValueKey(
+                              _selectedCategory + (_isRent ? 'rent' : 'buy'),
+                            ),
+                            properties: filtered,
+                            onWishlistTap: _onWishlistTap,
+                            onTakeLookTap: _onTakeLookTap,
+                            onShareTap: _onShareTap,
+                          ),
+                  ),
+                  const Gap(24),
+
+                  // ─── Category Tabs ─────────────────────────────────────
+                  CategoryTabs(
+                    selectedCategory: _selectedCategory,
+                    onCategoryChanged: (cat) =>
+                        setState(() => _selectedCategory = cat),
+                  ),
+                  const Gap(24),
+                ],
               ),
-              const Gap(16),
-            ],
+            ),
           ),
         ),
       ),

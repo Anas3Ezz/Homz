@@ -50,5 +50,7 @@
 "nav_search": "Search",
 "nav_wishlist": "Wishlist",
 "nav_chat": "Chat",
-"nav_profile": "Profile"
+"nav_profile": "Profile",
+"empty_state_title": "No Properties Found",
+"empty_state_subtitle": "Try switching the category\nor toggle between Rent and Buy."
 }
